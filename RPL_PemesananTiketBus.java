@@ -81,12 +81,13 @@ public class RPL_PemesananTiketBus {
 			System.out.println("---------------");
 
 			// Formatting
-			String regex = "^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$";
-			name = checkFormat("[\\D]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                           : ");
+			String regex = "(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[0-2])\\/([0-9]{4})";
+			name = checkFormat("[a-zA-Z]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                           : ");
 			age = checkFormatIntDeep(100, 0, "Maaf, umur harus angka (1-100).", scan, "Umur Pemesanan                           : ");
 			String id = age >= 17 ? "KTP" : "KK";
 			System.out.println("Tanda Pengenal (KTP/KK)                  : " + id);
-			date = checkFormat(regex, "Maaf, masukkan format yang sesuai(dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
+			// date = isValid(regex, "Maaf, masukkan format yang sesuai(dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
+			date = isValid(regex, "Maaf, masukkan format yang sesuai(dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
 			seatType = checkFormatIntDeep(2, 0, "Maaf, masukkan format dan range yang sesuai.", scan, "Pilih letak kursi (1. Window / 2. Aisle) : ");
 			
 			if (seatType == 1 && windowSeat <= 15) {
@@ -112,6 +113,21 @@ public class RPL_PemesananTiketBus {
 
 		System.out.println("\nTiket ini tidak bisa di refund!");
 		System.out.println("Patuhi peraturan dan hati-hati di jalan.\n");
+	}
+
+	private static String isValid(String regex, String message, Scanner scan, String text) {
+		java.text.DateFormat formatter = new java.text.SimpleDateFormat("dd/MM/yyyy");
+		System.out.print(text);
+		String value = scan.nextLine();
+		try {
+			formatter.setLenient(false);
+			if (formatter.parse(value) != null) return value;
+		} catch(java.text.ParseException e) {
+			System.out.println(message);
+			isValid(regex, message, scan, text);
+		}
+
+		return value;
 	}
 
 	private static String checkFormat(String regex, String message, Scanner scan, String text) {
