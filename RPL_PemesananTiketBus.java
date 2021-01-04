@@ -1,6 +1,9 @@
 import java.util.*;
 
+
 class PemesananTiketBus {
+	final int GET_HOURS = (new Random().nextInt(8-7) + 7);
+	final int GET_MINUTE = (new Random().nextInt(9-0) + 0);
 	private String name, id, date;
 	private int age, number, seatType;
 
@@ -15,6 +18,10 @@ class PemesananTiketBus {
 		this.date = date;
 		this.number = number;
 		this.seatType = seatType;
+	}
+
+	String getHours(int temp) {
+		return String.valueOf(GET_HOURS + ":" + temp + "" + GET_MINUTE);
 	}
 
 	String getName() {
@@ -42,12 +49,12 @@ class PemesananTiketBus {
 	}
 
 	protected void printInfo() {
-		int temp = (new Random().nextInt(5-0) + 0);
+		int temp = (new Random().nextInt(5-1) + 1);
 		System.out.println("Cetak Tiket Pesanan . . . . .");
 		System.out.println(getSeatType() == 1 ? "Tiket pesanan untuk tempat duduk nomor (1-15)" : "Tiket pesanan untuk tempat duduk nomor (16-30)");
 		System.out.println("Nomor bus anda        : " + temp);
 		System.out.println("Nomor tempat duduk    : " + getNumber());
-		System.out.println("Jadwal keberangkatan  : 0" + (new Random().nextInt(8-7) + 7) + ":" + temp + "" + (new Random().nextInt(9-0) + 0));
+		System.out.println("Jadwal keberangkatan  : 0" + getHours(temp));
 		System.out.println("Tanggal pemesanan     : " + getDate());
 		System.out.println("Tanggal cetak pesanan : " + new java.text.SimpleDateFormat("dd/MM/yyyy | HH:mm:ss").format(new Date()));
 		System.out.println("Kode tiket            : " + getNumber() + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + temp);
@@ -82,12 +89,11 @@ public class RPL_PemesananTiketBus {
 
 			// Formatting
 			String regex = "(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[0-2])\\/([0-9]{4})";
-			name = checkFormat("[a-zA-Z]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                           : ");
+			name = checkFormat("[a-zA-Z ]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                           : ");
 			age = checkFormatIntDeep(100, 0, "Maaf, umur harus angka (1-100).", scan, "Umur Pemesanan                           : ");
 			String id = age >= 17 ? "KTP" : "KK";
 			System.out.println("Tanda Pengenal (KTP/KK)                  : " + id);
-			// date = isValid(regex, "Maaf, masukkan format yang sesuai(dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
-			date = isValid(regex, "Maaf, masukkan format yang sesuai(dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
+			date = isValid(regex, "Maaf, tanggal tidak valid atau format tidak sesuai (dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
 			seatType = checkFormatIntDeep(2, 0, "Maaf, masukkan format dan range yang sesuai.", scan, "Pilih letak kursi (1. Window / 2. Aisle) : ");
 			
 			if (seatType == 1 && windowSeat <= 15) {
@@ -147,7 +153,7 @@ public class RPL_PemesananTiketBus {
 			System.out.print(text);
 			value = scan.nextInt();
 			scan.nextLine();
-		} catch(java.util.InputMismatchException | NegativeArraySizeException e) {
+		} catch(InputMismatchException | NegativeArraySizeException e) {
 			scan.nextLine();
 			System.out.println(message);
 			value = checkFormatIntDeep(max, min, message, scan, text);
