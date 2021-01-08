@@ -2,14 +2,14 @@ import java.util.*;
 
 
 class PemesananTiketBus {
-	private String name, id, date;
-	private int age, number, seatType;
+	private String name, id, date, number;
+	private int age, seatType;
 
 	PemesananTiketBus() {
 		// Should not call this constructor.
 	}
 
-	PemesananTiketBus(String name, String id, int age, String date, int number, int seatType) {
+	PemesananTiketBus(String name, String id, int age, String date, String number, int seatType) {
 		this.name = name;
 		this.id = id;
 		this.age = age;
@@ -34,7 +34,7 @@ class PemesananTiketBus {
 		return date;
 	}
 
-	int getNumber() {
+	String getNumber() {
 		return number;
 	}
 
@@ -42,16 +42,16 @@ class PemesananTiketBus {
 		return seatType;
 	}
 
-	protected void printInfo(int hour, int minute) {
+	protected void printInfo(int hour, int minute, int minute2) {
 		int temp = (new Random().nextInt(5-1) + 1);
 		System.out.println("Cetak Tiket Pesanan . . . . .");
 		System.out.println(getSeatType() == 1 ? "Tiket pesanan untuk tempat duduk nomor (1-15)" : "Tiket pesanan untuk tempat duduk nomor (16-30)");
 		System.out.println("Nomor bus anda        : " + temp);
 		System.out.println("Nomor tempat duduk    : " + getNumber());
-		System.out.println("Jadwal keberangkatan  : 0" + String.valueOf(hour + ":" + temp + "" + minute));
+		System.out.println("Jadwal keberangkatan  : 0" + String.valueOf(hour + ":" + minute2 + "" + minute));
 		System.out.println("Tanggal pemesanan     : " + getDate());
 		System.out.println("Tanggal cetak pesanan : " + new java.text.SimpleDateFormat("dd/MM/yyyy | HH:mm:ss").format(new Date()));
-		System.out.println("Kode tiket            : " + getNumber() + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + temp);
+		System.out.println("Kode tiket            : " + getNumber().charAt(0) + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + temp);
 	}
 }
 
@@ -59,19 +59,18 @@ public class RPL_PemesananTiketBus {
 	final static Random random = new Random();
 	final static int hours = random.nextInt(8-7) + 7;
 	final static int minutes = random.nextInt(9-0) + 0;
+	final static int minutes2 = random.nextInt(5-1) + 1;
 
 	public static void main(String[] args) {
 		final int hour = hours;
 		final int minute = minutes;
+		final int minute2 = minutes2;
+		final LinkedList<String> NOMOR_BUS = new LinkedList<>(Arrays.asList());
 		Scanner scan = new Scanner(System.in);
-		LinkedList<Integer> window = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15));
-		LinkedList<Integer> aisle = new LinkedList<>(Arrays.asList(16, 17, 18, 19, 20, 21, 23, 24, 25, 27, 28 ,29, 30));
-		Collections.shuffle(window);
-		Collections.shuffle(aisle);
 
 		// Init var.
-		String name, date;
-		int purchase, number=0, age = -1, seatType = -1, aisleSeat = 1, windowSeat = 1;
+		String name, date, number;
+		int purchase, age = -1, seatType = -1, aisleSeat = 1, windowSeat = 1 ;
 		PemesananTiketBus[] tickets;
 
 		System.out.println("=====================================================");
@@ -89,22 +88,20 @@ public class RPL_PemesananTiketBus {
 
 			// Formatting
 			String regex = "(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[0-2])\\/([0-9]{4})";
-			name = checkFormat("[a-zA-Z ]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                           : ");
-			age = checkFormatIntDeep(100, 0, "Maaf, umur harus angka (1-100).", scan, "Umur Pemesanan                           : ");
+			name = checkFormat("[a-zA-Z ]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                     : ");
+			age = checkFormatIntDeep(100, 0, "Maaf, umur harus angka (1-100).", scan, "Umur Pemesanan                     : ");
 			String id = age >= 17 ? "KTP" : "KK";
-			System.out.println("Tanda Pengenal (KTP/KK)                  : " + id);
-			date = isValid(regex, "Maaf, tanggal tidak valid atau format tidak sesuai (dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020)       : ");
-			seatType = checkFormatIntDeep(2, 0, "Maaf, masukkan format dan range yang sesuai.", scan, "Pilih letak kursi (1. Window / 2. Aisle) : ");
-			
-			if (seatType == 1 && windowSeat <= 15) {
-				windowSeat++;
-				number = window.poll();
-			} else if (aisleSeat <= 15) {
-				aisleSeat++;
-				seatType = 2;
-				number = aisle.poll();
-			} else System.out.println("Maaf kursi sudah penuh, silahkan melakukan pemesanan nanti lagi.");
-			
+			System.out.println("Tanda Pengenal (KTP/KK)            : " + id);
+			date = isValid(regex, "Maaf, tanggal tidak valid atau format tidak sesuai (dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020) : ");
+			do {
+
+				number = checkFormat("[1-8]{1}[a-dA-D]{1}", "Maaf, masukkan inputan sesuai pilihan dibawah ini.", scan, "----------------------\n    Pintu    Supir\n    1A 1B    1C 1D\n    2A 2B    2C 2D\n    3A 3B    3C 3D\n    4A 4B    4C 4D\n    5A 5B    5C 5D\n    6A 6B    6C 6D\n    7A 7B    7C 7D\n    Pintu\n    8A 8B 8C 8D 8E\n----------------------\nNomor Bus                          : ");
+				number = number.toUpperCase();
+				if (NOMOR_BUS.indexOf(number) != -1) 
+					System.out.println("Maaf, nomor tersebut sudah dipilih sebelumnya, mohon untuk memasukan nomor yang lain.");
+			} while(NOMOR_BUS.indexOf(number) != -1);
+			NOMOR_BUS.add(number);
+
 			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++\n");
 
 			// Initialization
@@ -115,7 +112,7 @@ public class RPL_PemesananTiketBus {
 
 		// Print ticket(s)
 		for (int i = 0; i < tickets.length; ++i)
-			tickets[i].printInfo(hour, minute);
+			tickets[i].printInfo(hour, minute, minute2);
 
 		System.out.println("\nTiket ini tidak bisa di refund!");
 		System.out.println("Patuhi peraturan dan hati-hati di jalan.\n");
@@ -130,7 +127,7 @@ public class RPL_PemesananTiketBus {
 			if (formatter.parse(value) != null) return value;
 		} catch(java.text.ParseException e) {
 			System.out.println(message);
-			isValid(regex, message, scan, text);
+			value = isValid(regex, message, scan, text);
 		}
 
 		return value;
@@ -141,7 +138,7 @@ public class RPL_PemesananTiketBus {
 		String value = scan.nextLine();
 		if (!value.matches(regex)) {
 			System.out.println(message);
-			checkFormat(regex, message, scan, text);
+			value = checkFormat(regex, message, scan, text);
 		}
 
 		return value;
