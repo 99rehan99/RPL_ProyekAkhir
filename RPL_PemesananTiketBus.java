@@ -44,11 +44,12 @@ class PemesananTiketBus {
 
 	protected void printInfo(int hour, int minute, int minute2) {
 		System.out.println("Cetak Tiket Pesanan . . . . .");
-		System.out.println("Nomor tempat duduk    : " + getName());
+		System.out.println("Nama Pemesan          : " + getName());
 		System.out.println("Nomor tempat duduk    : " + getNumber());
 		System.out.println("Jadwal keberangkatan  : 0" + String.valueOf(hour + ":" + minute2 + "" + minute));
 		System.out.println("Tanggal pemesanan     : " + getDate());
 		System.out.println("Tanggal cetak pesanan : " + new java.text.SimpleDateFormat("dd/MM/yyyy | HH:mm:ss").format(new Date()));
+		System.out.println("Harga Tiket           : Rp. 200.000,00");
 		System.out.println("Kode tiket            : " + getNumber().charAt(0) + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + getNumber().charAt(1) + "\n");
 	}
 }
