@@ -44,12 +44,12 @@ class PemesananTiketBus {
 
 	protected void printInfo(int hour, int minute, int minute2) {
 		System.out.println("Cetak Tiket Pesanan . . . . .");
-		System.out.println(getSeatType() == 1 ? "Tiket pesanan untuk tempat duduk nomor (1-15)" : "Tiket pesanan untuk tempat duduk nomor (16-30)");
+		System.out.println("Nomor tempat duduk    : " + getName());
 		System.out.println("Nomor tempat duduk    : " + getNumber());
 		System.out.println("Jadwal keberangkatan  : 0" + String.valueOf(hour + ":" + minute2 + "" + minute));
 		System.out.println("Tanggal pemesanan     : " + getDate());
 		System.out.println("Tanggal cetak pesanan : " + new java.text.SimpleDateFormat("dd/MM/yyyy | HH:mm:ss").format(new Date()));
-		System.out.println("Kode tiket            : " + getNumber().charAt(0) + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + getNumber().charAt(1));
+		System.out.println("Kode tiket            : " + getNumber().charAt(0) + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + getNumber().charAt(1) + "\n");
 	}
 }
 
@@ -75,7 +75,7 @@ public class RPL_PemesananTiketBus {
 		System.out.println("\tSelamat datang di Pemesanan Tiket Bus");
 		System.out.println("=====================================================\n");
 
-		purchase = checkFormatIntDeep(30, 0, "Maaf, masukkan format dan range yang sesuai.", scan, "Jumlah tiket yang dipesan (1-30): ");
+		purchase = checkFormatIntDeep(30, 0, "Maaf, masukkan format dan range yang sesuai.", scan, "Jumlah tiket yang dipesan (1-33): ");
 		tickets = new PemesananTiketBus[purchase];
 
 		System.out.println("\nSilahkan lengkapi identitas pemesanan.");
@@ -86,16 +86,14 @@ public class RPL_PemesananTiketBus {
 
 			// Formatting
 			String regex = "(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[0-2])\\/([0-9]{4})";
-			name = checkFormat("[a-zA-Z ]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesanan                     : ");
-			age = checkFormatIntDeep(100, 0, "Maaf, umur harus angka (1-100).", scan, "Umur Pemesanan                     : ");
+			name = checkFormat("[a-zA-Z ]+", "Maaf, masukkan inputan berupa huruf.", scan, "Nama Pemesan                       : ");
+			age = checkFormatIntDeep(100, 0, "Maaf, umur harus angka (1-100).", scan, "Umur Pemesan                       : ");
 			String id = age >= 17 ? "KTP" : "KK";
 			System.out.println("Tanda Pengenal (KTP/KK)            : " + id);
 			date = isValid(regex, "Maaf, tanggal tidak valid atau format tidak sesuai (dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020) : ");
 			do {
 
 				number = checkFormat("[1-8]{1}[a-dA-D]{1}", "Maaf, masukkan inputan sesuai pilihan dibawah ini.", scan, "    --------------    \n    Pintu    Supir\n    1A 1B    1C 1D\n    2A 2B    2C 2D\n    3A 3B    3C 3D\n    4A 4B    4C 4D\n    5A 5B    5C 5D\n    6A 6B    6C 6D\n    7A 7B    7C 7D\n    Pintu\n    8A 8B 8C 8D 8E\n    --------------    \nPilih Nomor Tempat Duduk           : ");
-				// Nomor Bus                          :
-				// Pilih Nomor Tempat Duduk           :
 				number = number.toUpperCase();
 				if (NOMOR_BUS.indexOf(number) != -1) 
 					System.out.println("Maaf, nomor tersebut sudah dipilih sebelumnya, mohon untuk memasukan nomor yang lain.");
