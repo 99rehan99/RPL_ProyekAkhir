@@ -43,15 +43,13 @@ class PemesananTiketBus {
 	}
 
 	protected void printInfo(int hour, int minute, int minute2) {
-		int temp = (new Random().nextInt(5-1) + 1);
 		System.out.println("Cetak Tiket Pesanan . . . . .");
 		System.out.println(getSeatType() == 1 ? "Tiket pesanan untuk tempat duduk nomor (1-15)" : "Tiket pesanan untuk tempat duduk nomor (16-30)");
-		System.out.println("Nomor bus anda        : " + temp);
 		System.out.println("Nomor tempat duduk    : " + getNumber());
 		System.out.println("Jadwal keberangkatan  : 0" + String.valueOf(hour + ":" + minute2 + "" + minute));
 		System.out.println("Tanggal pemesanan     : " + getDate());
 		System.out.println("Tanggal cetak pesanan : " + new java.text.SimpleDateFormat("dd/MM/yyyy | HH:mm:ss").format(new Date()));
-		System.out.println("Kode tiket            : " + getNumber().charAt(0) + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + temp);
+		System.out.println("Kode tiket            : " + getNumber().charAt(0) + getId() + String.valueOf(getName().charAt(0)).toUpperCase() + getNumber().charAt(1));
 	}
 }
 
@@ -95,7 +93,9 @@ public class RPL_PemesananTiketBus {
 			date = isValid(regex, "Maaf, tanggal tidak valid atau format tidak sesuai (dd/mm/yyyy).", scan, "Tanggal Pemesanan (ex. 12/12/2020) : ");
 			do {
 
-				number = checkFormat("[1-8]{1}[a-dA-D]{1}", "Maaf, masukkan inputan sesuai pilihan dibawah ini.", scan, "----------------------\n    Pintu    Supir\n    1A 1B    1C 1D\n    2A 2B    2C 2D\n    3A 3B    3C 3D\n    4A 4B    4C 4D\n    5A 5B    5C 5D\n    6A 6B    6C 6D\n    7A 7B    7C 7D\n    Pintu\n    8A 8B 8C 8D 8E\n----------------------\nNomor Bus                          : ");
+				number = checkFormat("[1-8]{1}[a-dA-D]{1}", "Maaf, masukkan inputan sesuai pilihan dibawah ini.", scan, "    --------------    \n    Pintu    Supir\n    1A 1B    1C 1D\n    2A 2B    2C 2D\n    3A 3B    3C 3D\n    4A 4B    4C 4D\n    5A 5B    5C 5D\n    6A 6B    6C 6D\n    7A 7B    7C 7D\n    Pintu\n    8A 8B 8C 8D 8E\n    --------------    \nPilih Nomor Tempat Duduk           : ");
+				// Nomor Bus                          :
+				// Pilih Nomor Tempat Duduk           :
 				number = number.toUpperCase();
 				if (NOMOR_BUS.indexOf(number) != -1) 
 					System.out.println("Maaf, nomor tersebut sudah dipilih sebelumnya, mohon untuk memasukan nomor yang lain.");
